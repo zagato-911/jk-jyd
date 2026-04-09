@@ -1264,12 +1264,18 @@
             
             if (index !== -1) {
                 const currentProduct = data[index].product;
-                if (currentProduct === 'A类优质工薪') {
-                    data[index].product = 'B类优质工薪';
-                } else if (currentProduct === 'B类优质工薪') {
-                    data[index].product = 'C类优质工薪';
-                } else {
-                    data[index].product = 'A类优质工薪';
+                // 提取类型部分（例如：从"A类优质工薪"中提取"优质工薪"）
+                const typeMatch = currentProduct.match(/[ABC]类(.+)/);
+                if (typeMatch) {
+                    const type = typeMatch[1];
+                    // 根据当前类别切换到下一个类别
+                    if (currentProduct.startsWith('A类')) {
+                        data[index].product = `B类${type}`;
+                    } else if (currentProduct.startsWith('B类')) {
+                        data[index].product = `C类${type}`;
+                    } else if (currentProduct.startsWith('C类')) {
+                        data[index].product = `A类${type}`;
+                    }
                 }
                 localStorage.setItem('crmData', JSON.stringify(data));
                 renderTable();
